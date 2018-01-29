@@ -3,6 +3,7 @@
 #include "vector"
 #include "map"
 #include "Poco/DOM/Node.h"
+#include "Poco/Util/JSONConfiguration.h"
 
 
 #ifdef  LTPOCOXMLTEST_EXPORTS
@@ -25,10 +26,10 @@ public:
 	int LoadByXmlPath(const std::string &sXmlPath);
 
 	// 通过视频帧id和人脸id获取人脸数据
-	int GetFrameDataByFrameIdAndFaceId(int iFrameId, int iFaceId, std::string &sJson);
+	int GetOneFaceDataByFrameIdAndFaceId(int iFrameId, int iFaceId, std::string &sJson);
 
-	// 通过tag获取值
-	std::string GetValByTag(Poco::XML::Node *node, const std::string &sTag);
+	// 通过视频帧id和人脸id获取人脸数据
+	int GetAllFaceDataByFrameId(int iFrameId, std::string &sJson);
 
 private:
 	// 人脸检测信息
@@ -84,6 +85,9 @@ private:
 	typedef std::map<int, VecOneFrameFace> MapAllFrameData;    // 键为帧序号，值为这一帧的所有人脸数据
 
 
+	// 通过tag获取值
+	std::string GetValByTag(Poco::XML::Node *node, const std::string &sTag);
+
 	// 获取人脸检测信息
 	int GetFaceDetInfo(Poco::XML::Node *node, StFaceDetectInfo &stDetInfo);
 
@@ -93,8 +97,12 @@ private:
 	// 获取质量信息
 	int GetFaceQualityInfo(Poco::XML::Node *node, StFaceQuality &stQualityInfo);
 
+	bool FormatOneFaceJson(const StFrameFaceData &stOneData, const std::string &sFrameId, int iFaceId, Poco::Util::JSONConfiguration &jsonData);
+	
+
 private:
 
 	MapAllFrameData m_vecXmlData;
+	std::string m_sVideoName;
 };
 
